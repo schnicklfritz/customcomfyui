@@ -6,8 +6,8 @@ on:
   workflow_dispatch:
 
 env:
-  # TODO: Change this to your Docker Hub image name
-  IMAGE_NAME: your_dockerhub_username/comfyui-quickpod-custom
+  # CHANGE THIS to your Docker Hub username/repo
+  IMAGE_NAME: your_username/comfyui-quickpod-custom
 
 jobs:
   build:
@@ -17,6 +17,34 @@ jobs:
       packages: write
 
     steps:
+      # 1. MAXIMIZE DISK SPACE (Crucial for Megapack)
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # Free up space by removing unnecessary pre-installed tools
+          tool-cache: true
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+
+      # 2. MOVE DOCKER TO /mnt (The Github Runner has more space here)
+      - name: Move Docker data-root to /mnt
+        run: |
+          sudo systemctl stop docker
+          sudo mkdir -p /mnt/docker
+          sudo mkdir -p /etc/docker
+          # Configure Docker to use /mnt/docker for storage
+          sudo tee /etc/docker/daemon.json > /dev/null <<'EOF'
+          {
+            "data-root": "/mnt/docker"
+          }
+          EOF
+          sudo systemctl restart docker
+          docker info | grep "Docker Root Dir"
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
