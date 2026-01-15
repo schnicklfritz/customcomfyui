@@ -7,7 +7,7 @@ on:
 
 env:
   # CHANGE THIS to your Docker Hub username/repo
-  IMAGE_NAME: your_username/comfyui-quickpod-custom
+  IMAGE_NAME: schnicklfritz/customcomfyui
 
 jobs:
   build:
