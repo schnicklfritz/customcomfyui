@@ -7,7 +7,7 @@ on:
 
 env:
   # CHANGE THIS to your Docker Hub username/repo
-  IMAGE_NAME: schnicklfritz/customcomfyui
+  IMAGE_NAME: schnicklbob/customcomfyui
 
 jobs:
   build:
